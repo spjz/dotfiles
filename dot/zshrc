@@ -17,8 +17,8 @@ setopt pushd_ignore_dups
 setopt pushd_silent
 setopt auto_cd
 
-setopt extended_glob # allows us to use ^ to negate globs
-unsetopt nomatch # but when pattern matching fails, simply use the command as is. See robbyrussell/oh-my-zsh#449
+# allows us to use ^ to negate globs
+setopt extended_glob
 
 # defining word endings
 WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
@@ -27,6 +27,7 @@ autoload -Uz compinit && compinit
 zstyle ':completion:*' menu select
 
 # }}}
+
 # terminal colors {{{
 
 TC='\e['
@@ -41,18 +42,29 @@ Cyan="${TC}36m";
 White="${TC}37m";
 
 # }}}
+
 # path {{{
 
+export GNUBIN_PATH=/usr/local/opt/coreutils/libexec/gnubin
+export TEXBIN=/Library/TeX/texbin
+export PACKER_BIN=~/bin/packer_0.8.6_darwin_amd64
+export ZPLUG_BIN=~/.zplug/bin
+export PHALCON_PATH=/Volumes/Development/devtools/phalcon-devtools
+export GCLOUD_PATH=/Volumes/Development/devtools/google-cloud-sdk
 PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-
-GNUBIN_PATH=/usr/local/opt/coreutils/libexec/gnubin
+PATH="$PHALCON_PATH:$PATH"
+PATH="$GCLOUD_PATH:$PATH"
 PATH="$GNUBIN_PATH:$PATH"
+PATH="$TEXBIN:$PATH"
+PATH="$PACKER_BIN:$PATH"
+PATH="$ZPLUG_BIN:$PATH"
 
 MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 
 export PATH
 
 # }}}
+
 # exports {{{
 
 # needed in some machines
@@ -61,9 +73,14 @@ if [ -z ${SHELL+x}  ]; then
 fi
 
 # standard configs
-export LANG=en_US.UTF-8
+export LANG=en_GB.UTF-8
 export TERM=xterm-256color
 export EDITOR=nvim
+
+## ? ##
+# Enable a different cursor in NVIM in insert mode
+export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+## ? ##
 
 # zplug config
 export ZPLUG_CLONE_DEPTH=1
@@ -78,6 +95,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="find . -path '*/.git' -prune -o -type d -print"
 
 # }}}
+
 # FZF Setup {{{
 # -------------
 if [[ ! "$PATH" == *.fzf/bin* ]]; then
@@ -99,6 +117,7 @@ fi
 source "$HOME/.fzf/shell/key-bindings.zsh"
 
 # }}}
+
 # load user config {{{
 
 SHELL_USER_CONFIG_FILE="$(realpath ~)/.options/shell-options.conf"
@@ -107,6 +126,7 @@ if [[ -e "$SHELL_USER_CONFIG_FILE" ]]; then
 fi
 
 # }}}
+
 # plugins {{{
 
 # Zplug
@@ -132,17 +152,48 @@ zplug load
 eval `dircolors ~/.lscolors`
 
 # }}}
-# binds and alias {{{
+
+# terminal colors {{{
+
+TC='\e['
+
+CLR_LINE_START="${TC}1K"
+CLR_LINE_END="${TC}K"
+CLR_LINE="${TC}2K"
+
+# Hope no terminal is greater than 1k columns
+RESET_LINE="${CLR_LINE}${TC}1000D"
+
+# Colors and styles (based on https://github.com/demure/dotfiles/blob/master/subbash/prompt)
+
+Bold="${TC}1m"    # Bold text only, keep colors
+Undr="${TC}4m"    # Underline text only, keep colors
+Inv="${TC}7m"     # Inverse: swap background and foreground colors
+Reg="${TC}22;24m" # Regular text only, keep colors
+RegF="${TC}39m"   # Regular foreground coloring
+RegB="${TC}49m"   # Regular background coloring
+Rst="${TC}0m"     # Reset all coloring and style
+
+# Basic            High Intensity      Background           High Intensity Background
+Black="${TC}30m";  IBlack="${TC}90m";  OnBlack="${TC}40m";  OnIBlack="${TC}100m";
+Red="${TC}31m";    IRed="${TC}91m";    OnRed="${TC}41m";    OnIRed="${TC}101m";
+Green="${TC}32m";  IGreen="${TC}92m";  OnGreen="${TC}42m";  OnIGreen="${TC}102m";
+Yellow="${TC}33m"; IYellow="${TC}93m"; OnYellow="${TC}43m"; OnIYellow="${TC}103m";
+Blue="${TC}34m";   IBlue="${TC}94m";   OnBlue="${TC}44m";   OnIBlue="${TC}104m";
+Purple="${TC}35m"; IPurple="${TC}95m"; OnPurple="${TC}45m"; OnIPurple="${TC}105m";
+Cyan="${TC}36m";   ICyan="${TC}96m";   OnCyan="${TC}46m";   OnICyan="${TC}106m";
+White="${TC}37m";  IWhite="${TC}97m";  OnWhite="${TC}47m";  OnIWhite="${TC}107m";
+
+# }}}
+
+# alias | binds {{{
 
 # Ag (the silver searcher)
 alias ag='ag --hidden --path-to-agignore=~/.agignore'
 
 # alias for frequent commands
-alias em='emacs'
-alias ls='ls --color=auto --group-directories-first -X'
-alias l='ls -h'
-alias ll='ls -Ah'
-alias la='ls -lhA'
+alias ls='ls --color=auto --group-directories-first'
+alias l='ls -lah'
 alias b='cd ..'
 alias c='clear'
 alias e='exit'
@@ -151,12 +202,13 @@ alias s='du -sm * | sort -nr | head -n 20'
 alias m='nman'
 alias vi='vim -u NONE -N'
 alias v='nvim'
+alias nv='nvim'
 alias k='k -h'
 alias vz='v ~/.zshrc(:A)'
 alias vv='v ~/.vimrc(:A)'
 alias tarc='tar -zcvf file.tar.gz'
 alias tarx='tar -zxvf'
-alias dot='la `find ~ -maxdepth 1 -type l`'
+alias dot='l `find ~ -maxdepth 1 -type l`'
 
 # rust alias
 alias rd='open /usr/local/share/doc/rust/html/index.html'
@@ -167,8 +219,9 @@ alias dic='dirs -c'
 alias po='popd'
 
 # git alias
-alias g='git status -sb'
+alias g='git status --short'
 alias gg='git branch -vv'
+alias gs='git status'
 alias ga='git add'
 alias gal='git add -A'
 alias gc='git commit -v'
@@ -178,15 +231,125 @@ alias gdh='git diff --cached'
 alias gf='git fetch'
 alias gm='git merge'
 alias gp='git push'
-alias gl='git log --pretty=format:"%C(yellow)%h%Creset %C(blue)%d%Creset %C(cyan)%ad%Creset %C(magenta)%an%Creset %C(white)%s%Creset " --date=relative --graph'
-alias glr='gl --reflog'
-alias gld='git log --pretty=format:"%C(yellow)%h%Creset %C(blue)%d%Creset %C(cyan)%ad%Creset %C(magenta)%an%Creset %s" --graph'
+alias gl='git log --pretty=format:"%C(yellow)%h%Creset %C(cyan)%ad%Creset %C(magenta)%an%Creset %s" --date=relative --graph'
+alias gld='git log --pretty=format:"%C(yellow)%h%Creset %C(cyan)%ad%Creset %C(magenta)%an%Creset %s" --graph'
 alias glf='git log --follow -p -- '
 alias glnc='git log --pretty=format:"%h %ad %an %s" --date=short --graph'
-alias glsi='git ls-files -oiX .gitignore'
-alias gi='builtin cd $(git rev-parse --show-toplevel)'
+alias gls='git log --graph --oneline'
+
+# Show/hide hidden files
+alias safy='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
+alias safn='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
+
+# Control Vagrant in working directory
+alias vu='vagrant up'
+alias vs='vagrant ssh'
+alias vh='vagrant halt'
+
+# Change working directory to CV - Change paths to reflect your local file system
+alias cvapp='cd /Volumes/Development/cv/jdi-resume-app'
+alias cvwzapp='cd /Volumes/Development/cv/webzai-resume-app'
+alias cvphuse='cd /Volumes/Development/cv/jdi-resume-app/vendor/phuse/framework'
+alias cvbox='cd /Volumes/Development/cv/box'
+
+# Control CV Vagrant box from any working directory
+alias cvu='cvbox; vu'
+alias cvs='cvbox; vs'
+alias cvh='cvbox; vh'
+
+# Run CV Vagrant CLI scripts from any working directory
+alias cvit="cvbox; vagrant ssh -- 'cd /var/www/jdi-resume-app/releases/dev; ENV=dev php cli/interval.php dispatch:intervalTasks:phuse:interval'"
+alias cvdt="cvbox; vagrant ssh -- 'cd /var/www/jdi-resume-app/releases/dev; ENV=dev php cli/event.php dispatch:devTasks:phuse:interval PLANService,billing,eigvpn,event,fail,fortifi,log,phuseService,report,retry,stats,user'"
+alias cvm="cvbox; vagrant ssh -- 'cd /var/www/jdi-webzai-app/releases/dev; ENV=dev php vendor/bin/migrant migrate'"
+alias cvn="cvbox; vagrant ssh -- 'sudo service nginx restart'"
+
+# Change working directory to VPN - Change paths to reflect your file system
+alias vpnapp='cd /Volumes/Development/vpn/jdi-vpn-app'
+alias vpnphuse='cd /Volumes/Development/vpn/jdi-vpn-app/vendor/phuse/framework'
+alias vpnbox='cd /Volumes/Development/vpn/box'
+
+# Control VPN Vagrant box from any working directory
+alias vpnu='vpnbox; vu'
+alias vpns='vpnbox; vs'
+alias vpnh='vpnbox; vh'
+
+# Run VPN Vagrant CLI scripts from any working directory
+alias vpnit="vpnbox; vagrant ssh -- 'cd /var/www/jdi-vpn-app/current; ENV=dev php cli/interval.php dispatch:intervalTasks:phuse:interval'"
+alias vpndt="vpnbox; vagrant ssh -- 'cd /var/www/jdi-vpn-app/current; ENV=dev php cli/event.php dispatch:devTasks:phuse:interval PLANService,billing,eigvpn,event,fail,fortifi,log,phuseService,report,retry,stats,user'"
+alias vpnm="vpnbox; vagrant ssh -- 'cd /var/www/jdi-vpn-app/current; ENV=dev php cli/migrant migrate'"
+alias vpnn="vpnbox; vagrant ssh -- 'sudo service nginx restart'"
+
+# Google Cloud Compute SDK
+source /Volumes/Development/devtools/google-cloud-sdk/completion.zsh.inc
+source /Volumes/Development/devtools/google-cloud-sdk/path.zsh.inc
+
+# RabitMQ
+tunnel() {
+  if [ ! -n "$1" ]
+  then
+    echo "Missing argument: product"
+    echo "Using default: vpn"
+    1="vpn"
+  fi
+  if [ ! -n "$2" ]
+  then
+    echo "Missing argument: environment"
+    echo "Using default: qa"
+    2="qa"
+  fi
+  if [ ! -n "$3" ]
+  then
+    echo "Missing argument: box"
+    echo "Using default: rmq"
+    3="rmq"
+  fi
+  if [ ! -n "$4" ]
+  then
+    echo "Missing argument: cluster"
+    echo "Using default: beta"
+    4="beta"
+  fi
+  if [ ! -n "$5" ]
+  then
+    echo "Missing argument: instance"
+    echo "Using default: 001"
+    5="001"
+  fi
+  if [ ! -n "$6" ]
+  then
+    echo "Missing argument: local port"
+    echo "Using default: 15676"
+    6="15676"
+  fi
+  if [ ! -n "$7" ]
+  then
+    echo "Missing argument: remote port"
+    echo "Using default: 15672"
+    7="15672"
+  fi
+
+  case $1 in
+    "cv")
+      echo "ssh -N $2-jump.cvdev.co -l spjz -L 127.0.0.1:$6:$1-$2-$3-$4-$5.c.jdicvlab.internal:$7"
+      ssh -N $2-jump.cvdev.co -l spjz -L 127.0.0.1:$6:$1-$2-$3-$4-$5.c.jdicvlab.internal:$7
+      ;;
+    "vpn")
+      echo "ssh -N $2-jump.vpndev.co -l spjz -L 127.0.0.1:$6:$1-$2-$3-$4-$5.c.jdivpn.internal:$7"
+      ssh -N $2-jump.vpndev.co -l spjz -L 127.0.0.1:$6:$1-$2-$3-$4-$5.c.jdivpn.internal:$7
+      ;;
+  esac
+}
+
+alias cv-qa-rmq-tunnel='ssh -N qa-jump.cvdev.co -l spjz -L 127.0.0.1:15676:cv-qa-rmq-alpha-001.c.jdicvlab.internal:15672'
+alias cv-prd-rmq-tunnel='ssh -N prod-jump.cvdev.co -l spjz -L 127.0.0.1:15676:cv-prod-rmq-alpha-001.c.jdicvlab.internal:15672'
+alias vpn-prd-rmq-tunnel='ssh -N prod-jump.vpndev.co -l spjz -L 127.0.0.1:15676:vpn-prod-rmq-alpha-001.c.jdivpn.internal:15672'
+alias vpn-qa-rmq-tunnel='ssh -N qa-jump.vpndev.co -l spjz -L 127.0.0.1:15676:vpn-qa-rmq-alpha-001.c.jdivpn.internal:15672'
+
+# zsh_completions
+fpath=(/usr/local/share/zsh-completions $fpath)
 
 # }}}
+
 # functions {{{
 
 # git_log_month: custom git log: 1 month worth of commits $1 months ago with $2 command {{{
@@ -223,6 +386,7 @@ git_log_month () {
 }
 
 # }}}
+
 # md: faster dir creation {{{
 
 md () {
@@ -231,6 +395,7 @@ md () {
 }
 
 # }}}
+
 # cd: enhancing enhancd {{{
 
 cd () {
@@ -255,6 +420,7 @@ cd () {
 }
 
 # }}}
+
 # =: front for `bc` utility (credit goes to arzzen/calc.plugin.zsh) {{{
 
 function = () {
@@ -262,6 +428,7 @@ function = () {
 }
 
 # }}}
+
 # nman: neoman vim plugin {{{
 
 function nman () {
@@ -287,6 +454,7 @@ compdef nman="man"
 # }}}
 
 # }}}
+
 # prompt {{{
 
 # light
@@ -295,15 +463,89 @@ compdef nman="man"
 ######## dark
 
 # very simple with directory truncation
-PROMPT='%F{blue}%12<...<%1~%<<%f %F{magenta}$%f '
+# PROMPT='%F{blue}%12<...<%1~%<<%f %F{magenta}$%f '
 
 # showing whoami@hostname
 # PROMPT='%F{blue}%1~%f %F{cyan}%n%f%F{red}@%f%F{yellow}%m%f %F{magenta}#%f '
 
 # showing whaami@hostname and with truncation
-# PROMPT="%F{blue}%10<...<%1~%<<%f %F{cyan}%n%f%F{red}@%f%F{yellow}%m%f %F{magenta}#%f "
+PROMPT="%F{blue}%10<...<%1~%<<%f %F{cyan}%n%f%F{red}@%f%F{yellow}%m%f %F{magenta}#%f "
 
 # }}}
+
+# gitprompt {{{
+
+# Adapted from code found at <https://gist.github.com/1712320>.
+
+setopt prompt_subst
+autoload -U colors && colors # Enable colors in prompt
+
+# Modify the colors and symbols in these variables as desired.
+GIT_PROMPT_SYMBOL="%{$fg[blue]%}±"
+GIT_PROMPT_PREFIX="%{$fg[green]%}[%{$reset_color%}"
+GIT_PROMPT_SUFFIX="%{$fg[green]%}]%{$reset_color%}"
+GIT_PROMPT_AHEAD="%{$fg[red]%}ANUM%{$reset_color%}"
+GIT_PROMPT_BEHIND="%{$fg[cyan]%}BNUM%{$reset_color%}"
+GIT_PROMPT_MERGING="%{$fg[magenta]%}⚡︎%{$reset_color%}"
+GIT_PROMPT_UNTRACKED="%{$fg[red]%}●%{$reset_color%}"
+GIT_PROMPT_MODIFIED="%{$fg[yellow]%}●%{$reset_color%}"
+GIT_PROMPT_STAGED="%{$fg[green]%}●%{$reset_color%}"
+
+# Show Git branch/tag, or name-rev if on detached head
+parse_git_branch() {
+  (git symbolic-ref -q HEAD || git name-rev --name-only --no-undefined --always HEAD) 2> /dev/null
+}
+
+# Show different symbols as appropriate for various Git repository states
+parse_git_state() {
+
+  # Compose this value via multiple conditional appends.
+  local GIT_STATE=""
+
+  local NUM_AHEAD="$(git log --oneline @{u}.. 2> /dev/null | wc -l | tr -d ' ')"
+  if [ "$NUM_AHEAD" -gt 0  ]; then
+      GIT_STATE=$GIT_STATE${GIT_PROMPT_AHEAD//NUM/$NUM_AHEAD}
+  fi
+
+  local NUM_BEHIND="$(git log --oneline ..@{u} 2> /dev/null | wc -l | tr -d ' ')"
+  if [ "$NUM_BEHIND" -gt 0  ]; then
+      GIT_STATE=$GIT_STATE${GIT_PROMPT_BEHIND//NUM/$NUM_BEHIND}
+  fi
+
+  local GIT_DIR="$(git rev-parse --git-dir 2> /dev/null)"
+  if [ -n $GIT_DIR  ] && test -r $GIT_DIR/MERGE_HEAD; then
+      GIT_STATE=$GIT_STATE$GIT_PROMPT_MERGING
+  fi
+
+  if [[ -n $(git ls-files --other --exclude-standard 2> /dev/null)  ]]; then
+      GIT_STATE=$GIT_STATE$GIT_PROMPT_UNTRACKED
+  fi
+
+  if ! git diff --quiet 2> /dev/null; then
+      GIT_STATE=$GIT_STATE$GIT_PROMPT_MODIFIED
+  fi
+
+  if ! git diff --cached --quiet 2> /dev/null; then
+      GIT_STATE=$GIT_STATE$GIT_PROMPT_STAGED
+  fi
+
+  if [[ -n $GIT_STATE  ]]; then
+      echo "$GIT_PROMPT_PREFIX$GIT_STATE$GIT_PROMPT_SUFFIX"
+  fi
+
+}
+
+# If inside a Git repository, print its branch and state
+git_prompt_string() {
+    local git_where="$(parse_git_branch)"
+    [ -n "$git_where"  ] && echo "$GIT_PROMPT_SYMBOL$(parse_git_state)$GIT_PROMPT_PREFIX%{$fg[yellow]%}${git_where#(refs/heads/|tags/)}$GIT_PROMPT_SUFFIX"
+}
+
+# Set the right-hand prompt
+RPS1='$(git_prompt_string)'
+
+# }}}
+
 # FZF ZLE extra bindkeys {{{
 
 bindkey '^E' fzf-cd-widget

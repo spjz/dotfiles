@@ -1,3 +1,6 @@
+[user]
+    name = Joe Doherty
+    email = joe@wzukltd.com
 [push]
   default = simple
 [diff]
