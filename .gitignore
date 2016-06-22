@@ -7,3 +7,6 @@ repos/
 plugged/
 custom/
 .config/
+.idea/
+conf/conf.iml
+dot/.gitconfig~
