@@ -49,15 +49,13 @@ export GNUBIN_PATH=/usr/local/opt/coreutils/libexec/gnubin
 export TEXBIN=/Library/TeX/texbin
 export PACKER_BIN=~/bin/packer_0.8.6_darwin_amd64
 export ZPLUG_BIN=~/.zplug/bin
-export PHALCON_PATH=/Volumes/Development/devtools/phalcon-devtools
-export GCLOUD_PATH=/Volumes/Development/devtools/google-cloud-sdk
+export RESTY_BIN="/usr/local/openresty/bin:/usr/local/openresty/nginx/sbin"
 PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-PATH="$PHALCON_PATH:$PATH"
-PATH="$GCLOUD_PATH:$PATH"
 PATH="$GNUBIN_PATH:$PATH"
 PATH="$TEXBIN:$PATH"
 PATH="$PACKER_BIN:$PATH"
 PATH="$ZPLUG_BIN:$PATH"
+PATH="$RESTY_BIN:$PATH"
 
 MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 
@@ -75,12 +73,10 @@ fi
 # standard configs
 export LANG=en_GB.UTF-8
 export TERM=xterm-256color
-export EDITOR=nvim
+export EDITOR=vim
 
-## ? ##
 # Enable a different cursor in NVIM in insert mode
-export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-## ? ##
+# export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 
 # zplug config
 export ZPLUG_CLONE_DEPTH=1
@@ -269,77 +265,9 @@ alias vh='vagrant halt'
 
 # }}}
 
-# Resume app {{{
-
-# Change working directory to CV {{{
-
-alias cvapp='cd /Volumes/Development/cv/jdi-resume-app'
-alias cvwzapp='cd /Volumes/Development/cv/webzai-resume-app'
-alias cvphuse='cd /Volumes/Development/cv/jdi-resume-app/vendor/phuse/framework'
-alias cvbox='cd /Volumes/Development/cv/box'
-
-# }}}
-
-# Control CV Vagrant box from any working directory {{{
-
-# }}}
-
-alias cvu='cvbox; vu'
-alias cvs='cvbox; vs'
-alias cvh='cvbox; vh'
-
-# }}}
-
-# Run CV Vagrant CLI scripts from any working directory {{{
-alias cvit="cvbox; vagrant ssh -- 'cd /var/www/jdi-resume-app/releases/dev; ENV=dev php cli/interval.php dispatch:intervalTasks:phuse:interval'"
-alias cvdt="cvbox; vagrant ssh -- 'cd /var/www/jdi-resume-app/releases/dev; ENV=dev php cli/event.php dispatch:devTasks:phuse:interval PLANService,billing,eigvpn,event,fail,fortifi,log,phuseService,report,retry,stats,user'"
-alias cvm="cvbox; vagrant ssh -- 'cd /var/www/jdi-webzai-app/releases/dev; ENV=dev php vendor/bin/migrant migrate'"
-alias cvn="cvbox; vagrant ssh -- 'sudo service nginx restart'"
-
-# }}}
-
-# VPN app {{{
-
-# Change working directory to VPN {{{
-
-alias vpnapp='cd /Volumes/Development/vpn/jdi-vpn-app'
-alias vpnphuse='cd /Volumes/Development/vpn/jdi-vpn-app/vendor/phuse/framework'
-alias vpnbox='cd /Volumes/Development/vpn/box'
-
-# }}}
-
-# Control VPN Vagrant box from any working directory {{{
-
-alias vpnu='vpnbox; vu'
-alias vpns='vpnbox; vs'
-alias vpnh='vpnbox; vh'
-
-# }}}
-
-# Run VPN Vagrant CLI scripts from any working directory {{{
-
-alias vpnit="vpnbox; vagrant ssh -- 'cd /var/www/jdi-vpn-app/current; ENV=dev php cli/interval.php dispatch:intervalTasks:phuse:interval'"
-alias vpndt="vpnbox; vagrant ssh -- 'cd /var/www/jdi-vpn-app/current; ENV=dev php cli/event.php dispatch:devTasks:phuse:interval PLANService,billing,eigvpn,event,fail,fortifi,log,phuseService,report,retry,stats,user'"
-alias vpnm="vpnbox; vagrant ssh -- 'cd /var/www/jdi-vpn-app/current; ENV=dev php cli/migrant migrate'"
-alias vpnn="vpnbox; vagrant ssh -- 'sudo service nginx restart'"
-
-# }}}
-
-# }}}
-
-# RMQ tunnel {{{
-
-alias cv-qa-rmq-tunnel='ssh -N qa-jump.cvdev.co -l spjz -L 127.0.0.1:15676:cv-qa-rmq-alpha-001.c.jdicvlab.internal:15672'
-alias cv-prd-rmq-tunnel='ssh -N prod-jump.cvdev.co -l spjz -L 127.0.0.1:15676:cv-prod-rmq-alpha-001.c.jdicvlab.internal:15672'
-alias vpn-prd-rmq-tunnel='ssh -N prod-jump.vpndev.co -l spjz -L 127.0.0.1:15676:vpn-prod-rmq-alpha-001.c.jdivpn.internal:15672'
-alias vpn-qa-rmq-tunnel='ssh -N qa-jump.vpndev.co -l spjz -L 127.0.0.1:15676:vpn-qa-rmq-alpha-001.c.jdivpn.internal:15672'
-
-# }}}
-
 # Google Cloud Compute SDK {{{
-
-source /Volumes/Development/devtools/google-cloud-sdk/completion.zsh.inc
-source /Volumes/Development/devtools/google-cloud-sdk/path.zsh.inc
+# source /Volumes/Development/devtools/google-cloud-sdk/completion.zsh.inc
+# source /Volumes/Development/devtools/google-cloud-sdk/path.zsh.inc
 
 # }}}
 
@@ -348,68 +276,6 @@ source /Volumes/Development/devtools/google-cloud-sdk/path.zsh.inc
 fpath=(/usr/local/share/zsh-completions $fpath)
 
 # }}}
-
-# }}}
-
-# functions {{{
-
-# RabitMQ {{{
-
-tunnel() {
-  if [ ! -n "$1" ]
-  then
-    echo "Missing argument: product"
-    echo "Using default: vpn"
-    1="vpn"
-  fi
-  if [ ! -n "$2" ]
-  then
-    echo "Missing argument: environment"
-    echo "Using default: qa"
-    2="qa"
-  fi
-  if [ ! -n "$3" ]
-  then
-    echo "Missing argument: box"
-    echo "Using default: rmq"
-    3="rmq"
-  fi
-  if [ ! -n "$4" ]
-  then
-    echo "Missing argument: cluster"
-    echo "Using default: beta"
-    4="beta"
-  fi
-  if [ ! -n "$5" ]
-  then
-    echo "Missing argument: instance"
-    echo "Using default: 001"
-    5="001"
-  fi
-  if [ ! -n "$6" ]
-  then
-    echo "Missing argument: local port"
-    echo "Using default: 15676"
-    6="15676"
-  fi
-  if [ ! -n "$7" ]
-  then
-    echo "Missing argument: remote port"
-    echo "Using default: 15672"
-    7="15672"
-  fi
-
-  case $1 in
-    "cv")
-      echo "ssh -N $2-jump.cvdev.co -l spjz -L 127.0.0.1:$6:$1-$2-$3-$4-$5.c.jdicvlab.internal:$7"
-      ssh -N $2-jump.cvdev.co -l spjz -L 127.0.0.1:$6:$1-$2-$3-$4-$5.c.jdicvlab.internal:$7
-      ;;
-    "vpn")
-      echo "ssh -N $2-jump.vpndev.co -l spjz -L 127.0.0.1:$6:$1-$2-$3-$4-$5.c.jdivpn.internal:$7"
-      ssh -N $2-jump.vpndev.co -l spjz -L 127.0.0.1:$6:$1-$2-$3-$4-$5.c.jdivpn.internal:$7
-      ;;
-  esac
-}
 
 # }}}
 
