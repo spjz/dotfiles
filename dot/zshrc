@@ -48,7 +48,7 @@ White="${TC}37m";
 export GNUBIN_PATH=/usr/local/opt/coreutils/libexec/gnubin
 export TEXBIN=/Library/TeX/texbin
 export PACKER_BIN=~/bin/packer_0.8.6_darwin_amd64
-export ZPLUG_BIN=~/.zplug/bin
+export ZPLUG_BIN=/usr/share/zplug/bin
 export RESTY_BIN="/usr/local/openresty/bin:/usr/local/openresty/nginx/sbin"
 PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 PATH="$GNUBIN_PATH:$PATH"
@@ -72,11 +72,11 @@ fi
 
 # standard configs
 export LANG=en_GB.UTF-8
-export TERM=xterm-256color
-export EDITOR=vim
+export TERM=urxvt
+export EDITOR=nvim
 
 # Enable a different cursor in NVIM in insert mode
-# export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 
 # zplug config
 export ZPLUG_CLONE_DEPTH=1
@@ -98,7 +98,7 @@ bindkey '^E' fzf-cd-widget
 # FZF Setup {{{
 # -------------
 if [[ ! "$PATH" == *.fzf/bin* ]]; then
-  export PATH="$PATH:$HOME/.fzf/bin"
+  export PATH="$PATH:/usr/bin/fzf"
 fi
 
 # Man path
@@ -109,11 +109,11 @@ fi
 
 # Auto-completion
 # ---------------
-[[ $- == *i* ]] && source "$HOME/.fzf/shell/completion.zsh" 2> /dev/null
+[[ $- == *i* ]] && source "/usr/share/fzf/completion.zsh" 2> /dev/null
 
 # Key bindings
 # ------------
-source "$HOME/.fzf/shell/key-bindings.zsh"
+source "/usr/share/fzf/key-bindings.zsh"
 
 # }}}
 
@@ -129,7 +129,7 @@ fi
 # plugins {{{
 
 # Zplug
-source ~/.zplug/init.zsh
+source /usr/share/zsh/scripts/zplug/init.zsh
 
 zplug "Tarrasch/zsh-bd"
 zplug "b4b4r07/enhancd", use:init.sh
