@@ -1,6 +1,6 @@
 [user]
-    name = pjosepherum
-    email = papaverjosepherum@gmail.com
+    name = sPJz
+    email = io@spjz.uk
 [push]
   default = simple
 [diff]
@@ -42,3 +42,5 @@
 [grep]
   lineNumber = true
   extendRegexp = true
+[credential]
+	helper = cache --timeout=43200
