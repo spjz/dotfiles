@@ -36,7 +36,7 @@ if [ -z ${SHELL+x}  ]; then
 fi
 
 # standard configs
-export LANG=en_US.UTF-8
+export LANG=en_GB.UTF-8
 export TERM=xterm-256color
 export EDITOR=nvim
 
@@ -172,6 +172,7 @@ alias w='echo -e "$Blue $PWD ${Red}at ${Cyan}$(whoami)${Red}@${Yellow}$(hostname
 alias m='nman'
 alias vi='vim -u NONE'
 alias v='nvim'
+#alias vim='nvim'
 alias k='k -h'
 alias vz='v ~/.zshrc(:A)'
 alias vv='v ~/.vimrc(:A)'
@@ -203,6 +204,11 @@ alias gld='git log --pretty=format:"%C(yellow)%h%Creset %C(cyan)%ad%Creset %C(ma
 alias glf='git log --follow -p -- '
 alias glnc='git log --pretty=format:"%h %ad %an %s" --date=short --graph'
 alias gls='git log --graph --oneline'
+
+# php alias
+alias php='php56'
+alias php-fpm='php56-fpm'
+alias pecl='pecl56'
 
 # }}}
 
@@ -298,13 +304,13 @@ compdef nman="man"
 ######## dark
 
 # very simple with directory truncation
-PROMPT='%F{blue}%12<...<%1~%<<%f %F{magenta}#%f '
+#PROMPT='%F{blue}%12<...<%1~%<<%f %F{magenta}#%f '
 
 # showing whoami@hostname
 # PROMPT='%F{blue}%1~%f %F{cyan}%n%f%F{red}@%f%F{yellow}%m%f %F{magenta}#%f '
 
 # showing whaami@hostname and with truncation
-# PROMPT="%F{blue}%10<...<%1~%<<%f %F{cyan}%n%f%F{red}@%f%F{yellow}%m%f %F{magenta}#%f "
+PROMPT="%F{blue}%10<...<%1~%<<%f %F{cyan}%n%f%F{red}@%f%F{yellow}%m%f %F{magenta}#%f "
 
 # }}}
 
