@@ -122,8 +122,7 @@ fi
 
 # fzf setup
 [[ $- == *i* ]] && source /usr/share/fzf/completion.zsh 2> /dev/null
-source /usr/share/fzf/key-bindings.zsh
-
+source /home/spjz/.dotfiles/deps/junegunn/fzf/shell/key-bindings.zsh
 # Zplug
 source /usr/share/zsh/scripts/zplug/init.zsh
 
