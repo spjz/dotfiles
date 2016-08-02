@@ -216,7 +216,7 @@ Plug 'kana/vim-textobj-user'
 Plug '~/.fzf'
 
 " temporarily, while I fix bug #152
-Plug '~/code/sources/ninrod-multiple-cursors'
+" Plug '~/code/sources/ninrod-multiple-cursors'
 " Plug 'terryma/vim-multiple-cursors'
 " Plug 'ninrod/vim-multiple-cursors'
 
