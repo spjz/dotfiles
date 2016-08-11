@@ -124,7 +124,7 @@ fi
 [[ $- == *i* ]] && source /usr/share/fzf/completion.zsh 2> /dev/null
 source /home/spjz/.dotfiles/deps/junegunn/fzf/shell/key-bindings.zsh
 # Zplug
-source /usr/share/zsh/scripts/zplug/init.zsh
+source /home/spjz/.dotfiles/deps/zplug/zplug/init.zsh
 
 # zplug "${DOTPATH}/deps/ninrod/nin-vi-mode", from:local
 # temp, while I fix ninrod/nin-vi-mode#3
