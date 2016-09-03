@@ -92,7 +92,7 @@ export PATH
 
 # standard configs
 export LANG=en_GB.UTF-8
-export TERM=xterm-256color
+export TERM=tmux-256color
 export EDITOR=nvim
 
 # zplug config
@@ -122,9 +122,9 @@ fi
 
 # fzf setup
 [[ $- == *i* ]] && source /usr/share/fzf/completion.zsh 2> /dev/null
-source /home/spjz/.dotfiles/deps/junegunn/fzf/shell/key-bindings.zsh
+source ${DOTPATH}/deps/junegunn/fzf/shell/key-bindings.zsh
 # Zplug
-source /home/spjz/.dotfiles/deps/zplug/zplug/init.zsh
+source ${DOTPATH}/deps/zplug/zplug/init.zsh
 
 # zplug "${DOTPATH}/deps/ninrod/nin-vi-mode", from:local
 # temp, while I fix ninrod/nin-vi-mode#3
