@@ -111,9 +111,21 @@ export FZF_ALT_C_COMMAND="find . -path '*/.git' -prune -o -type d -print"
 
 # load user config {{{
 
-SHELL_USER_CONFIG_FILE="$(readlink -f ~)/.options/shell-options.conf"
+SHELL_USER_CONFIG_FILE="$HOME/.options/shell-options.conf"
 if [[ -e "$SHELL_USER_CONFIG_FILE" ]]; then
   . "$SHELL_USER_CONFIG_FILE"
+fi
+
+# }}}
+
+# configure phalcon devtools path {{{
+export "PTOOLSPATH=/var/www/phalcon-devtools"
+# }}}
+
+# Set SSH to use gpg-agent {{{
+unset SSH_AGENT_PID
+if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+  export SSH_AUTH_SOCK="/run/user/$UID/gnupg/S.gpg-agent.ssh"
 fi
 
 # }}}
@@ -149,7 +161,7 @@ zplug "${DOTPATH}/deps/zsh-users/zsh-syntax-highlighting", from:local, nice:10
 
 # enhancd config
 if [[ "${SHELL_ENHANCD_ENABLED}" == "true"  ]]; then
-  zplug "${DOTPATH}/zplug-deps/enhancd", use:enhancd.sh, from:local
+  zplug "${DOTPATH}/deps/b4b4r07/enhancd", use:enhancd.sh, from:local
 fi
 
 if ! zplug check --verbose; then
@@ -382,9 +394,6 @@ driv () {
 
 alias v="nvim"
 alias vi='vim -u NONE -N'
-
-# neovim tests
-#alias vh='~/code/apps/neovim/build/bin/nvim'
 
 # fast edit frequent files
 alias vt='v $(readlink -f ~/.tmux.conf)'
