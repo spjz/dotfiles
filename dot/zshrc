@@ -1,71 +1,70 @@
 # zsh options {{{
 
-# ensure proper zsh functions are loaded
-fpath=(/usr/share/zsh/functions $fpath)
+	# ensure proper zsh functions are loaded
+	fpath=(/usr/local/share/zsh/functions $fpath)
 
-# defining word endings
-WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
+	# defining word endings
+	WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 
-# history config options
-HISTFILE=$HOME/.zsh_history
-HISTSIZE=20000
-SAVEHIST=20000
+	# history config options
+	HISTFILE=$HOME/.zsh_history
+	HISTSIZE=20000
+	SAVEHIST=20000
 
-setopt append_history
-setopt extended_history
-setopt share_history
-setopt hist_verify
+	setopt append_history
+	setopt extended_history
+	setopt share_history
+	setopt hist_verify
 
-# I actually want to profile my command usage
-setopt hist_ignore_all_dups
+	# I actually want to profile my command usage
+	setopt hist_ignore_all_dups
 
-# I do not care if I entered a command with a leading space
-# I want it to be stored
-setopt hist_ignore_space
+	# I do not care if I entered a command with a leading space
+	# I want it to be stored
+	setopt hist_ignore_space
 
-# dir navigation options
-setopt auto_pushd
-setopt pushd_ignore_dups
-setopt pushd_silent
-setopt auto_cd
+	# dir navigation options
+	setopt auto_pushd
+	setopt pushd_ignore_dups
+	setopt pushd_silent
+	setopt auto_cd
 
-# glob options
-setopt extended_glob # allows us to use ^ to negate globs
-unsetopt nomatch # but when pattern matching fails, simply use the command as is. See robbyrussell/oh-my-zsh#449
+	# glob options
+	setopt extended_glob # allows us to use ^ to negate globs
+	unsetopt nomatch # but when pattern matching fails, simply use the command as is. See robbyrussell/oh-my-zsh#449
 
-##### completions
+	##### completions
 
-# explaining the compinit -u hack:
-  # the compinit -u hack is called for because I run the shell as a docker image
-  # and mount the dotfiles repo as a volume. Compinit gets angry at me because
-  # when docker mounts the volume, the permissions are wrong.
-  # So when you run `exec zsh`, for exemple, compinit gets angry at you by saying:
-  # "zsh compinit: insecure directories and files, run compaudit for list."
-  # The -u flag tells compinit to be silent about that.
-  # more info here: http://stackoverflow.com/a/19601821/4921402
-# comp bootstrap
-autoload -Uz compinit && compinit -u
-zstyle ':completion:*' menu select
+	# explaining the compinit -u hack:
+		# the compinit -u hack is called for because I run the shell as a docker image
+		# and mount the dotfiles repo as a volume. Compinit gets angry at me because
+		# when docker mounts the volume, the permissions are wrong.
+		# So when you run `exec zsh`, for exemple, compinit gets angry at you by saying:
+		# "zsh compinit: insecure directories and files, run compaudit for list."
+		# The -u flag tells compinit to be silent about that.
+		# more info here: http://stackoverflow.com/a/19601821/4921402
+	# comp bootstrap
+	autoload -Uz compinit && compinit -u
+	zstyle ':completion:*' menu select
 
-# better completion
-setopt menu_complete
+	# better completion
+	setopt menu_complete
 
-# case insensitive completion
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+	# case insensitive completion
+	zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
-### fuzzy completion
-# lifted from http://superuser.com/a/815317/555734
-# 0 -- vanilla completion (abc => abc)
-# 1 -- smart case completion (abc => Abc)
-# 2 -- word flex completion (abc => A-big-Car)
-# 3 -- full flex completion (abc => ABraCadabra)
-zstyle ':completion:*' matcher-list '' \
-  'm:{a-z\-}={A-Z\_}' \
-  'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
-  'r:[[:ascii:]]||[[:ascii:]]=** r:|=* m:{a-z\-}={A-Z\_}'
+	### fuzzy completion
+	# lifted from http://superuser.com/a/815317/555734
+	# 0 -- vanilla completion (abc => abc)
+	# 1 -- smart case completion (abc => Abc)
+	# 2 -- word flex completion (abc => A-big-Car)
+	# 3 -- full flex completion (abc => ABraCadabra)
+	zstyle ':completion:*' matcher-list '' \
+		'm:{a-z\-}={A-Z\_}' \
+		'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
+		'r:[[:ascii:]]||[[:ascii:]]=** r:|=* m:{a-z\-}={A-Z\_}'
 
 # }}}
-
 # terminal colors {{{
 
 TC='\e['
@@ -81,452 +80,477 @@ White="${TC}37m";
 
 # }}}
 
-# source {{{
-# import .profile
-source /etc/profile
-source $HOME/.profile
-# }}}
+# imports {{{
 
-# path {{{
+	source $HOME/.profile
+	source /etc/profile
 
-PATH="$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-PATH="$PATH:$(ruby -e 'print Gem.user_dir')/bin"
-export PATH
-
-# }}}
+}}}
 
 # exports {{{
 
-# standard configs
-export LANG=en_GB.UTF-8
-export TERM=tmux-256color
-export EDITOR=nvim
+	export LANG=en_GB.UTF-8
+	export TERM=xterm-256color
+	export EDITOR=nvim
 
-# zplug config
-export ZPLUG_CLONE_DEPTH=1
+	export GNUBIN_PATH="/usr/local/opt/coreutils/libexec/gnubin"
+	export RVM_PATH="$HOME/.rvm/bin"
+	export PTOOLSPATH=/var/www/phalcon-devtools"
+	export FZF_PATH="$HOME/.fzf/bin"
+	export GNUMANPATH="/usr/local/opt/coreutils/libexec/gnuman"
 
-# ENHANCD customizations
-export ENHANCD_COMMAND=ecd
-export ENHANCD_FILTER=fzf-tmux
+	#export TEXBIN=/Library/TeX/texbin
+	#export PACKER_BIN=~/bin/packer_0.8.6_darwin_amd64
+	#export GCLOUD_PATH=/Volumes/Development/devtools/google-cloud-sdk
 
-# FZF customizations
-export FZF_DEFAULT_COMMAND='ag --hidden --path-to-agignore=~/.agignore -g ""'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_ALT_C_COMMAND="find . -path '*/.git' -prune -o -type d -print"
+	# zplug config
+	export ZPLUG_CLONE_DEPTH=1
 
+	# ENHANCD customizations
+	export ENHANCD_COMMAND=ecd
+	export ENHANCD_FILTER=fzf-tmux
+
+	# FZF customizations
+	export FZF_DEFAULT_COMMAND='ag --hidden --path-to-agignore=~/.agignore -g ""'
+	export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+	export FZF_ALT_C_COMMAND="find . -path '*/.git' -prune -o -type d -print"
+
+	# ssh-agent
+	export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+
+	# path {{{
+
+		PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+		PATH="$GNUBIN_PATH:$RVM_PATH:$PTOOLSPATH:$FZF_PATH:$PATH"
+		MANPATH="$GNUMANPATH:$MANPATH"
+
+		export PATH
+		export MANPATH
+
+	# }}}
 # }}}
 
 # load user config {{{
 
-SHELL_USER_CONFIG_FILE="$HOME/.options/shell-options.conf"
+SHELL_USER_CONFIG_FILE="$(readlink -f ~)/.options/shell-options.conf"
 if [[ -e "$SHELL_USER_CONFIG_FILE" ]]; then
   . "$SHELL_USER_CONFIG_FILE"
 fi
 
 # }}}
-
-# configure phalcon devtools path {{{
-export "PTOOLSPATH=/var/www/phalcon-devtools"
-# }}}
-
-# export ssh-agent {{{
-export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
-# }}}
-
 # plugins {{{
 
-# fzf setup
-[[ $- == *i* ]] && source /usr/share/fzf/completion.zsh 2> /dev/null
-source ${DOTPATH}/deps/junegunn/fzf/shell/key-bindings.zsh
-# Zplug
-source ${DOTPATH}/deps/zplug/zplug/init.zsh
+	# fzf setup
+	[[ $- == *i* ]] && source "$HOME/.fzf/shell/completion.zsh" 2> /dev/null
+	source "$HOME/.fzf/shell/key-bindings.zsh"
 
-# zplug "${DOTPATH}/deps/ninrod/nin-vi-mode", from:local
-# temp, while I fix ninrod/nin-vi-mode#3
-# zplug "~/code/sources/nin-vi-mode", from:local
+	# Zplug
+	source "$HOME/.zplug/init.zsh"
 
-zplug "${DOTPATH}/deps/ninrod/docker-alias", from:local, use:zshrc
-zplug "${DOTPATH}/deps/Tarrasch/zsh-bd", from:local
-zplug "${DOTPATH}/deps/ninrod/docker-zsh-completion", from:local
-zplug "${DOTPATH}/deps/supercrabtree/k", from:local
-zplug "${DOTPATH}/deps/zsh-users/zsh-completions", from:local
-zplug "${DOTPATH}/deps/b4b4r07/enhancd", from:local, use:init.sh
-zplug "${DOTPATH}/deps/zsh-users/zsh-syntax-highlighting", from:local, nice:10
-  ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
-  typeset -A ZSH_HIGHLIGHT_STYLES
-  ZSH_HIGHLIGHT_STYLES[alias]='fg=cyan,bold'
-  ZSH_HIGHLIGHT_STYLES[command]='fg=green,bold'
-  ZSH_HIGHLIGHT_STYLES[function]='fg=yellow,bold'
-  ZSH_HIGHLIGHT_STYLES[path]='fg=blue'
-  ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=yellow'
-  ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=cyan'
-  ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg=red'
+	# zplug "${DOTPATH}/deps/ninrod/nin-vi-mode", from:local
+	# temp, while I fix ninrod/nin-vi-mode#3
+	zplug "~/code/sources/nin-vi-mode", from:local
 
-# enhancd config
-if [[ "${SHELL_ENHANCD_ENABLED}" == "true"  ]]; then
-  zplug "${DOTPATH}/deps/b4b4r07/enhancd", use:enhancd.sh, from:local
-fi
+	zplug "${DOTPATH}/deps/ninrod/docker-alias", from:local, use:zshrc
+	zplug "${DOTPATH}/deps/Tarrasch/zsh-bd", from:local
+	zplug "${DOTPATH}/deps/ninrod/docker-zsh-completion", from:local
+	zplug "${DOTPATH}/deps/supercrabtree/k", from:local
+	zplug "${DOTPATH}/deps/zsh-users/zsh-completions", from:local
+	zplug "${DOTPATH}/deps/b4b4r07/enhancd", from:local, use:init.sh
+	zplug "${DOTPATH}/deps/zsh-users/zsh-syntax-highlighting", from:local, nice:10
+		ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
+		typeset -A ZSH_HIGHLIGHT_STYLES
+		ZSH_HIGHLIGHT_STYLES[alias]='fg=cyan,bold'
+		ZSH_HIGHLIGHT_STYLES[command]='fg=green,bold'
+		ZSH_HIGHLIGHT_STYLES[function]='fg=yellow,bold'
+		ZSH_HIGHLIGHT_STYLES[path]='fg=blue'
+		ZSH_HIGHLIGHT_STYLES[path_pathseparator]='fg=yellow'
+		ZSH_HIGHLIGHT_STYLES[path_prefix]='fg=cyan'
+		ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]='fg=red'
 
-if ! zplug check --verbose; then
-  printf "Install? [y/N]: "
-  if read -q; then
-    echo; zplug install
-  fi
-fi
-zplug load
+	# enhancd config
+	# if [[ "${SHELL_ENHANCD_ENABLED}" == "true"  ]]; then
+	#   zplug "${DOTPATH}/zplug-deps/enhancd", use:enhancd.sh, from:local
+	# fi
 
-# colors for GNU ls (from coreutils)
-eval $(dircolors ~/.lscolors)
+	if ! zplug check --verbose; then
+		printf "Install? [y/N]: "
+		if read -q; then
+			echo; zplug install
+		fi
+	fi
+	zplug load
+
+	# colors for GNU ls (from coreutils)
+	eval $(dircolors ~/.lscolors)
 
 # }}}
-
 # alias {{{
 
-# function alias {{{
+	# function alias {{{
 
-# cd: enhancing enhancd {{{
+		# cd: enhancing enhancd {{{
 
-cd() {
-  if [[ -z $1 ]]; then
-    # $1 is empty. go home
-    builtin cd ~
-  elif [[ $1 == '-' ]]; then
-    # $1 == '-': switch to last visited dir
-    builtin cd - > /dev/null
-  elif [[ $1 == '..' ]]; then
-    builtin cd ..
-  elif [[ $1 =~ '\+[0-9]{1,2}' ]]; then
-    # $1: `cd +8`, `cd +10`, cherry pick auto_pushd stack
-    builtin cd $1 > /dev/null
-  elif command -v "$ENHANCD_COMMAND" > /dev/null; then
-    # populate dir enhancd dir cache, clear and list
-    eval "$ENHANCD_COMMAND $1"
-  else
-    # enhancd did not load, use normal cd, clear and list
-    builtin cd $1
-  fi
-}
+			cd() {
+				if [[ -z $1 ]]; then
+					# $1 is empty. go home
+					builtin cd ~
+				elif [[ $1 == '-' ]]; then
+					# $1 == '-': switch to last visited dir
+					builtin cd - > /dev/null
+				elif [[ $1 == '..' ]]; then
+					builtin cd ..
+				elif [[ $1 =~ '\+[0-9]{1,2}' ]]; then
+					# $1: `cd +8`, `cd +10`, cherry pick auto_pushd stack
+					builtin cd $1 > /dev/null
+				elif command -v "$ENHANCD_COMMAND" > /dev/null; then
+					# populate dir enhancd dir cache, clear and list
+					eval "$ENHANCD_COMMAND $1"
+				else
+					# enhancd did not load, use normal cd, clear and list
+					builtin cd $1
+				fi
+			}
 
-# }}}
+		# }}}
+		# s and sk: get recursive dir size measurements {{{
 
-# s and sk: get recursive dir size measurements {{{
+			# s: get megabytes measurement
+			# usage: s [-h] [path]
+			s() {
+				if [[ -z ${1+x} ]]; then
+					# no argument passed. measure current dir including hidden files.
+					du -sm *(D) | sort -nr | head -n 20
+					return 0
+				fi
+				# an argument was passed.
+				if [[ $1 = '-h' ]]; then
+					# -h switch: human readable size output, but it is not suitable for ordering with, e.g., command sort.
+					if [[ -n ${2+x} ]]; then
+						# if a path was passed, apply -h switch to the path
+						du -sh $2
+						return 0;
+					else
+						# if a path was not passed, apply -h switch to all files, including hidden files
+						du -sh *(D)
+					fi
+				else
+					# bogus argument. print error
+					print -l 'bogus argument. check function documentation'
+				fi
+			}
 
-# s: get megabytes measurement
-# usage: s [-h] [path]
-s() {
-  if [[ -z ${1+x} ]]; then
-    # no argument passed. measure current dir including hidden files.
-    du -sm *(D) | sort -nr | head -n 20
-    return 0
-  fi
-  # an argument was passed.
-  if [[ $1 = '-h' ]]; then
-    # -h switch: human readable size output, but it is not suitable for ordering with, e.g., command sort.
-    if [[ -n ${2+x} ]]; then
-      # if a path was passed, apply -h switch to the path
-      du -sh $2
-      return 0;
-    else
-      # if a path was not passed, apply -h switch to all files, including hidden files
-      du -sh *(D)
-    fi
-  else
-    # bogus argument. print error
-    print -l 'bogus argument. check function documentation'
-  fi
-}
+			# sk: get kilobytes measurement. for human readable output check the s function
+			# usage: s [path]
+			sk() {
+				if [[ -z ${1+x} ]]; then
+					# no argument passed. measure current dir including hidden files.
+					du -sk *(D) | sort -nr | head -n 20
+					return 0;
+				fi
+				# argument passed.
+				du -sk $1 | sort -nr | head -n 20
+			}
 
-# sk: get kilobytes measurement. for human readable output check the s function
-# usage: s [path]
-sk() {
-  if [[ -z ${1+x} ]]; then
-    # no argument passed. measure current dir including hidden files.
-    du -sk *(D) | sort -nr | head -n 20
-    return 0;
-  fi
-  # argument passed.
-  du -sk $1 | sort -nr | head -n 20
-}
+		# }}}
+		# md: faster dir creation {{{
 
-# }}}
+			md() {
+				mkdir -p $1
+				builtin cd $1
+			}
 
-# md: faster dir creation {{{
+		# }}}
 
-md() {
-  mkdir -p $1
-  builtin cd $1
-}
+		# =: front for the `bc` utility  {{{
 
-# }}}
+			# credits: original idea by github.com/arzzen/calc.plugin.zsh
+			# usage: = '1+1'
+			= () {
+				bc -l <<< "$@"
+			}
 
-# =: front for the `bc` utility  {{{
+		# }}}
 
-# credits: original idea by github.com/arzzen/calc.plugin.zsh
-# usage: = '1+1'
-= () {
-  bc -l <<< "$@"
-}
+		# nman: neoman vim plugin {{{
 
-# }}}
+			function nman () {
+				if [[ -z $* ]]; then
+					echo "What manual page do you want?"
+					return
+				fi
+				local tmp=$IFS
+				IFS=$'\n' out=($(command man -w $* 2>&1))
+				local code=$?
+				IFS=$tmp
+				if [[ ${#out[@]} > 1 ]]; then
+					echo "Too many manpages"
+					return
+				elif [[ $code != 0 ]]; then
+					echo "No manual entry for $*"
+					return
+				fi
+				vim -c "Nman $*"
+			}
+			compdef nman="man"
 
-# nman: neoman vim plugin {{{
+		# }}}
 
-function nman () {
-  if [[ -z $* ]]; then
-    echo "What manual page do you want?"
-    return
-  fi
-  local tmp=$IFS
-  IFS=$'\n' out=($(command man -w $* 2>&1))
-  local code=$?
-  IFS=$tmp
-  if [[ ${#out[@]} > 1 ]]; then
-    echo "Too many manpages"
-    return
-  elif [[ $code != 0 ]]; then
-    echo "No manual entry for $*"
-    return
-  fi
-  vim -c "Nman $*"
-}
-compdef nman="man"
+	# }}}
 
-# }}}
+	# ls
+	alias ls='ls --color=auto --group-directories-first -X'
+	alias l='ls -lh'
+	alias la='l -A'
 
-# }}}
+	# quick alias
+	alias c='clear'
+	alias q='exit'
+	alias b='builtin cd ..'
+	alias w='echo -e "$Blue ${"$(pwd)"/$HOME/~} ${Red}at ${Cyan}$(whoami)${Red}@${Yellow}$(hostname -s)$Red using $Yellow${0}$Purple ${DOT_PROMPT_CHAR:-$}${Rst}"'
+	alias m='nman'
+	alias t='tmux'
 
-# ls
-alias ls='ls --color=auto --group-directories-first -X'
-alias l='ls -lh'
-alias la='l -A'
+	# apps
+	alias ag='ag --hidden --path-to-agignore=~/.agignore'
+	alias ms='gfm-viewer'
+	alias tarc='tar -zcvf file.tar.gz'
+	alias tarx='tar -zxvf'
 
-# quick alias
-alias c='clear'
-alias q='exit'
-alias b='builtin cd ..'
-alias w='echo -e "$Blue ${"$(pwd)"/$HOME/~} ${Red}at ${Cyan}$(whoami)${Red}@${Yellow}$(hostname -s)$Red using $Yellow${0}$Purple ${DOT_PROMPT_CHAR:-$}${Rst}"'
-alias m='nman'
-alias t='tmux'
+	# zsh config
+	alias re='exec zsh'
+	alias r='echo -e "${Red}you have pressed \`r\`. careful. this repeats last command."'
+	alias dot='la $(find ~ -maxdepth 1 -type l)'
 
-# apps
-alias ag='ag --hidden --path-to-agignore=~/.agignore'
-alias ms='gfm-viewer'
-alias tarc='tar -zcvf file.tar.gz'
-alias tarx='tar -zxvf'
+	# git {{{
 
-# zsh config
-alias re='exec zsh'
-alias r='echo -e "${Red}you have pressed \`r\`. careful. this repeats last command."'
-alias dot='la $(find ~ -maxdepth 1 -type l)'
+		# check
+		alias g='git status -sb'
+		alias gi='builtin cd $(git rev-parse --show-toplevel)'
+		# add
+		alias gd='git diff'
+		alias gds='git diff --staged'
+		alias gal='git add -A'
+		git_commit() {
+			if [[ -n "$1" ]]; then
+				git commit -m "$1"
+				return 0
+			fi
+			git commit -v
+		}
+		alias gc='git_commit'
+		# sync
+		alias gf='git fetch'
+		alias gp='git push'
+		alias gm='git merge'
+		alias gr='git rebase'
+		# branch
+		alias gg='git branch -vv'
+		alias gb='git branch'
+		alias gco='git checkout'
+		# log
+		alias git_log_custom='git log --pretty=format:"%C(yellow)%h%Creset %C(cyan)%>(14)%ad%Creset %C(magenta)%<(7)%an%Creset %C(blue)%d%Creset %C(white)%s%Creset" --abbrev=7 '
+		alias gld='git_log_custom --graph --date=format:"%Y-%m-%d %H:%M:%S"'
+		alias gl='gld --date=relative'
+		alias git_log_nocolor_custom='git log --no-color --pretty=format:"%h %d %ad %an %s" '
+		alias gldnc='git_log_nocolor_custom --graph'
+		alias glnc='gldnc --date=relative'
+		# ls-files
+		alias glsu='git ls-files --others --exclude-standard'
+		alias glsi='git ls-files -oiX .gitignore'
 
-# git {{{
+	# }}}
+	# pushd directory navigation {{{
 
-# check
-alias g='git status -sb'
-alias gi='builtin cd $(git rev-parse --show-toplevel)'
-# add
-alias gd='git diff'
-alias gds='git diff --staged'
-alias gal='git add -A'
-git_commit() {
-  if [[ -n "$1" ]]; then
-    git commit -m "$1"
-    return 0
-  fi
-  git commit -v
-}
-alias gc='git_commit'
-# sync
-alias gf='git fetch'
-alias gp='git push'
-alias gm='git merge'
-alias gr='git rebase'
-# branch
-alias gg='git branch -vv'
-alias gb='git branch'
-alias gco='git checkout'
-# log
-alias git_log_custom='git log --pretty=format:"%C(yellow)%h%Creset %C(cyan)%>(14)%ad%Creset %C(magenta)%<(7)%an%Creset %C(blue)%d%Creset %C(white)%s%Creset" --abbrev=7 '
-alias gld='git_log_custom --graph --date=format:"%Y-%m-%d %H:%M:%S"'
-alias gl='gld --date=relative'
-alias git_log_nocolor_custom='git log --no-color --pretty=format:"%h %d %ad %an %s" '
-alias gldnc='git_log_nocolor_custom --graph'
-alias glnc='gldnc --date=relative'
-# ls-files
-alias glsu='git ls-files --others --exclude-standard'
-alias glsi='git ls-files -oiX .gitignore'
+		alias d='dirs -v | head -n 20 | sort -k 2'
+		alias dic='dirs -c'
+		alias 1='cd +1'
+		alias 2='cd +2'
+		alias 3='cd +3'
+		alias 4='cd +4'
+		alias 5='cd +5'
+		alias 6='cd +6'
+		alias 7='cd +7'
+		alias 8='cd +8'
+		alias 9='cd +9'
+		alias 10='cd +10'
+		alias 11='cd +11'
+		alias 12='cd +12'
+		alias 13='cd +13'
+		alias 14='cd +14'
+		alias 15='cd +15'
+		alias 16='cd +16'
+		alias 17='cd +17'
+		alias 18='cd +18'
+		alias 19='cd +19'
 
-# }}}
-# pushd directory navigation {{{
+	# }}}
+	# docker {{{
 
-alias d='dirs -v | head -n 20 | sort -k 2'
-alias dic='dirs -c'
-alias 1='cd +1'
-alias 2='cd +2'
-alias 3='cd +3'
-alias 4='cd +4'
-alias 5='cd +5'
-alias 6='cd +6'
-alias 7='cd +7'
-alias 8='cd +8'
-alias 9='cd +9'
-alias 10='cd +10'
-alias 11='cd +11'
-alias 12='cd +12'
-alias 13='cd +13'
-alias 14='cd +14'
-alias 15='cd +15'
-alias 16='cd +16'
-alias 17='cd +17'
-alias 18='cd +18'
-alias 19='cd +19'
+		# driv: remove imagens docker vazias {{{
 
-# }}}
-# docker {{{
+			driv () {
+				docker images | ag '^<none' | awk '{print $3}' | xargs -I{} docker rmi {}
+			}
 
-# driv: remove imagens docker vazias {{{
+		# }}}
 
-driv () {
-  docker images | ag '^<none' | awk '{print $3}' | xargs -I{} docker rmi {}
-}
+	# }}}
+	# emacs {{{
 
-# }}}
+		# starting
+		alias e='emacsclient -t'
+		alias ec='emacs -Q'
+		alias ed='emacs --daemon'
 
-# }}}
-# vim {{{
+		# killing and restarting
+		alias ek='emacsclient -e "(kill-emacs)"'
+		alias er='ek && ed'
 
-alias v="nvim"
-alias vi='vim -u NONE -N'
+		# edit init files
+		alias ei='e $(readlink -f ~/.emacs.d/init.el)'
+		alias es='e $(readlink -f ~/.spacemacs.d/init.el)'
+		alias eo='e $(readlink -f ~/code/orgmode/programming.org)'
 
-# fast edit frequent files
-alias vt='v $(readlink -f ~/.tmux.conf)'
-alias vv='v $(readlink -f ~/.vimrc)'
-alias vz='v $(readlink -f ~/.zshrc)'
-alias vo='v $(readlink -f ~/.options/shell-options.conf)'
+	# }}}
 
-# }}}
+	# vim {{{
+
+		alias v="nvim"
+		alias vi='vim -u NONE -N'
+
+		# neovim tests
+		alias vh='~/code/apps/neovim/build/bin/nvim'
+
+		# fast edit frequent files
+		alias vt='v $(readlink -f ~/.tmux.conf)'
+		alias vv='v $(readlink -f ~/.vimrc)'
+		alias vz='v $(readlink -f ~/.zshrc)'
+		alias vo='v $(readlink -f ~/.options/shell-options.conf)'
+
+		# vim helping in emacs setup
+		alias ve='v $(readlink -f ~/.emacs.d/init.el)'
+		alias vs='v $(readlink -f ~/.spacemacs.d/init.el)'
+
+	# }}}
 
 # }}}
 
 # prompt {{{
 
-# char options: ❯, λ, ➜, ∴
-build_prompt_char() {
-  local pc=${DOT_PROMPT_CHAR:-$}
-  if [[ -n ${2+x} ]]; then
-    pc="$2"
-  fi
-  local prompt_char="%(?.%F{$1}.%F{red})${pc}%f"
-  echo -n "$prompt_char"
-}
+	# char options: ❯, λ, ➜, ∴
+	build_prompt_char() {
+		local pc=${DOT_PROMPT_CHAR:-$}
+		if [[ -n ${2+x} ]]; then
+			pc="$2"
+		fi
+		local prompt_char="%(?.%F{$1}.%F{red})${pc}%f"
+		echo -n "$prompt_char"
+	}
 
-# default: showing whoami@hostname without truncation
-# 1: simplest with directory truncation
-# 2: showing whoami@hostname and with truncation
-PROMPT='%F{blue}%1~%f %F{cyan}%n%f%F{red}@%f%F{yellow}%m%f %F{magenta}#%f  '
-if [[ "${SHELL_PROMPT_INFO_LEVEL}" == "1" ]]; then
-  PROMPT="%F{blue}%15<...<%1~%<<%f $(build_prompt_char magenta)  "
-elif [[ "${SHELL_PROMPT_INFO_LEVEL}" == "2" ]]; then
-  PROMPT="%F{blue}%10<...<%1~%<<%f %F{cyan}%n%f%F{red}@%f%F{yellow}%m%f %F{magenta}#%f  "
-fi
+	# default: showing whoami@hostname without truncation
+	# 1: simplest with directory truncation
+	# 2: showing whaami@hostname and with truncation
+	PROMPT='%F{blue}%1~%f %F{cyan}%n%f%F{red}@%f%F{yellow}%m%f %F{magenta}#%f  '
+	if [[ "${SHELL_PROMPT_INFO_LEVEL}" == "1" ]]; then
+		PROMPT="%F{blue}%15<...<%1~%<<%f $(build_prompt_char magenta)  "
+	elif [[ "${SHELL_PROMPT_INFO_LEVEL}" == "2" ]]; then
+		PROMPT="%F{blue}%10<...<%1~%<<%f %F{cyan}%n%f%F{red}@%f%F{yellow}%m%f %F{magenta}#%f  "
+	fi
+
+	# gitprompt {{{
+
+		# Adapted from code found at <https://gist.github.com/1712320>.
+
+		setopt prompt_subst
+		autoload -U colors && colors # Enable colors in prompt
+
+		# Modify the colors and symbols in these variables as desired.
+		GIT_PROMPT_SYMBOL="%{$fg[blue]%}±"
+		GIT_PROMPT_PREFIX="%{$fg[green]%}[%{$reset_color%}"
+		GIT_PROMPT_SUFFIX="%{$fg[green]%}]%{$reset_color%}"
+		GIT_PROMPT_AHEAD="%{$fg[red]%}ANUM%{$reset_color%}"
+		GIT_PROMPT_BEHIND="%{$fg[cyan]%}BNUM%{$reset_color%}"
+		GIT_PROMPT_MERGING="%{$fg[magenta]%}⚡︎%{$reset_color%}"
+		GIT_PROMPT_UNTRACKED="%{$fg[red]%}●%{$reset_color%}"
+		GIT_PROMPT_MODIFIED="%{$fg[yellow]%}●%{$reset_color%}"
+		GIT_PROMPT_STAGED="%{$fg[green]%}●%{$reset_color%}"
+
+		# Show Git branch/tag, or name-rev if on detached head
+		parse_git_branch() {
+			(git symbolic-ref -q HEAD || git name-rev --name-only --no-undefined --always HEAD) 2> /dev/null
+		}
+
+		# Show different symbols as appropriate for various Git repository states
+		parse_git_state() {
+
+			# Compose this value via multiple conditional appends.
+			local GIT_STATE=""
+
+			local NUM_AHEAD="$(git log --oneline @{u}.. 2> /dev/null | wc -l | tr -d ' ')"
+			if [ "$NUM_AHEAD" -gt 0  ]; then
+					GIT_STATE=$GIT_STATE${GIT_PROMPT_AHEAD//NUM/$NUM_AHEAD}
+			fi
+
+			local NUM_BEHIND="$(git log --oneline ..@{u} 2> /dev/null | wc -l | tr -d ' ')"
+			if [ "$NUM_BEHIND" -gt 0  ]; then
+					GIT_STATE=$GIT_STATE${GIT_PROMPT_BEHIND//NUM/$NUM_BEHIND}
+			fi
+
+			local GIT_DIR="$(git rev-parse --git-dir 2> /dev/null)"
+			if [ -n $GIT_DIR  ] && test -r $GIT_DIR/MERGE_HEAD; then
+					GIT_STATE=$GIT_STATE$GIT_PROMPT_MERGING
+			fi
+
+			if [[ -n $(git ls-files --other --exclude-standard 2> /dev/null)  ]]; then
+					GIT_STATE=$GIT_STATE$GIT_PROMPT_UNTRACKED
+			fi
+
+			if ! git diff --quiet 2> /dev/null; then
+					GIT_STATE=$GIT_STATE$GIT_PROMPT_MODIFIED
+			fi
+
+			if ! git diff --cached --quiet 2> /dev/null; then
+					GIT_STATE=$GIT_STATE$GIT_PROMPT_STAGED
+			fi
+
+			if [[ -n $GIT_STATE  ]]; then
+					echo "$GIT_PROMPT_PREFIX$GIT_STATE$GIT_PROMPT_SUFFIX"
+			fi
+
+		}
+
+		# If inside a Git repository, print its branch and state
+		git_prompt_string() {
+				local git_where="$(parse_git_branch)"
+				[ -n "$git_where"  ] && echo "$GIT_PROMPT_SYMBOL$(parse_git_state)$GIT_PROMPT_PREFIX%{$fg[yellow]%}${git_where#(refs/heads/|tags/)}$GIT_PROMPT_SUFFIX"
+		}
+
+		# Set the right-hand prompt
+		RPS1='$(git_prompt_string)'
+
+	# }}}
 
 # }}}
-
-# gitprompt {{{
-
-# Adapted from code found at <https://gist.github.com/1712320>.
-
-setopt prompt_subst
-autoload -U colors && colors # Enable colors in prompt
-
-# Modify the colors and symbols in these variables as desired.
-GIT_PROMPT_SYMBOL="%{$fg[blue]%}±"
-GIT_PROMPT_PREFIX="%{$fg[green]%}[%{$reset_color%}"
-GIT_PROMPT_SUFFIX="%{$fg[green]%}]%{$reset_color%}"
-GIT_PROMPT_AHEAD="%{$fg[red]%}ANUM%{$reset_color%}"
-GIT_PROMPT_BEHIND="%{$fg[cyan]%}BNUM%{$reset_color%}"
-GIT_PROMPT_MERGING="%{$fg[magenta]%}⚡︎%{$reset_color%}"
-GIT_PROMPT_UNTRACKED="%{$fg[red]%}●%{$reset_color%}"
-GIT_PROMPT_MODIFIED="%{$fg[yellow]%}●%{$reset_color%}"
-GIT_PROMPT_STAGED="%{$fg[green]%}●%{$reset_color%}"
-
-# Show Git branch/tag, or name-rev if on detached head
-parse_git_branch() {
-  (git symbolic-ref -q HEAD || git name-rev --name-only --no-undefined --always HEAD) 2> /dev/null
-}
-
-# Show different symbols as appropriate for various Git repository states
-parse_git_state() {
-
-  # Compose this value via multiple conditional appends.
-  local GIT_STATE=""
-
-  local NUM_AHEAD="$(git log --oneline @{u}.. 2> /dev/null | wc -l | tr -d ' ')"
-  if [ "$NUM_AHEAD" -gt 0  ]; then
-      GIT_STATE=$GIT_STATE${GIT_PROMPT_AHEAD//NUM/$NUM_AHEAD}
-  fi
-
-  local NUM_BEHIND="$(git log --oneline ..@{u} 2> /dev/null | wc -l | tr -d ' ')"
-  if [ "$NUM_BEHIND" -gt 0  ]; then
-      GIT_STATE=$GIT_STATE${GIT_PROMPT_BEHIND//NUM/$NUM_BEHIND}
-  fi
-
-  local GIT_DIR="$(git rev-parse --git-dir 2> /dev/null)"
-  if [ -n $GIT_DIR  ] && test -r $GIT_DIR/MERGE_HEAD; then
-      GIT_STATE=$GIT_STATE$GIT_PROMPT_MERGING
-  fi
-
-  if [[ -n $(git ls-files --other --exclude-standard 2> /dev/null)  ]]; then
-      GIT_STATE=$GIT_STATE$GIT_PROMPT_UNTRACKED
-  fi
-
-  if ! git diff --quiet 2> /dev/null; then
-      GIT_STATE=$GIT_STATE$GIT_PROMPT_MODIFIED
-  fi
-
-  if ! git diff --cached --quiet 2> /dev/null; then
-      GIT_STATE=$GIT_STATE$GIT_PROMPT_STAGED
-  fi
-
-  if [[ -n $GIT_STATE  ]]; then
-      echo "$GIT_PROMPT_PREFIX$GIT_STATE$GIT_PROMPT_SUFFIX"
-  fi
-
-}
-
-# If inside a Git repository, print its branch and state
-git_prompt_string() {
-    local git_where="$(parse_git_branch)"
-    [ -n "$git_where"  ] && echo "$GIT_PROMPT_SYMBOL$(parse_git_state)$GIT_PROMPT_PREFIX%{$fg[yellow]%}${git_where#(refs/heads/|tags/)}$GIT_PROMPT_SUFFIX"
-}
-
-# Set the right-hand prompt
-RPS1='$(git_prompt_string)'
-
-# }}}
-
 # bootstrap commands {{{
 
-# user git information set up
-if [[ -n ${GIT_USER_NAME+x} ]]; then
-  git config --global user.name $GIT_USER_NAME
-  export GIT_USER_NAME
-fi
-if [[ -n ${GIT_USER_EMAIL+x} ]]; then
-  git config --global user.email $GIT_USER_EMAIL
-  export GIT_USER_EMAIL
-fi
+	# user git information set up
+	if [[ -n ${GIT_USER_NAME+x} ]]; then
+		git config --global user.name $GIT_USER_NAME
+		export GIT_USER_NAME
+	fi
+	if [[ -n ${GIT_USER_EMAIL+x} ]]; then
+		git config --global user.email $GIT_USER_EMAIL
+		export GIT_USER_EMAIL
+	fi
 
-if [[ -n ${DOTPATH+x} ]]; then
-  export DOTPATH
-fi
+	if [[ -n ${DOTPATH+x} ]]; then
+		export DOTPATH
+	fi
 
-# export relevant user options
-if [[ -n ${DOT_TERMINAL_EMULATOR+x} ]]; then
-  export DOT_TERMINAL_EMULATOR
-fi
+	# export relevant user options
+	if [[ -n ${DOT_TERMINAL_EMULATOR+x} ]]; then
+		export DOT_TERMINAL_EMULATOR
+	fi
 
 # }}}
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"

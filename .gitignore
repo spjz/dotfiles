@@ -2,7 +2,6 @@
 tags
 zcompdump
 
-.idea
 .cache
 .netrwhist
 
@@ -10,8 +9,4 @@ zcompdump
 
 repos/
 deps/
-plugged/
-custom/
-undodir/
-backups/
-auto-save-list/
+games/
