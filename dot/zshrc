@@ -81,9 +81,16 @@ White="${TC}37m";
 
 # }}}
 
+# source {{{
+# import .profile
+source /etc/profile
+source $HOME/.profile
+# }}}
+
 # path {{{
 
-PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+PATH="$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+PATH="$PATH:$(ruby -e 'print Gem.user_dir')/bin"
 export PATH
 
 # }}}
@@ -122,12 +129,8 @@ fi
 export "PTOOLSPATH=/var/www/phalcon-devtools"
 # }}}
 
-# Set SSH to use gpg-agent {{{
-unset SSH_AGENT_PID
-if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
-  export SSH_AUTH_SOCK="/run/user/$UID/gnupg/S.gpg-agent.ssh"
-fi
-
+# export ssh-agent {{{
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 # }}}
 
 # plugins {{{
@@ -524,3 +527,6 @@ if [[ -n ${DOT_TERMINAL_EMULATOR+x} ]]; then
 fi
 
 # }}}
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"

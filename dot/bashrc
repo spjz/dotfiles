@@ -1,5 +1,8 @@
 # bash options {{{
 
+# import profile
+source $HOME/.profile
+
 set -o vi
 shopt -s autocd
 
@@ -7,6 +10,14 @@ shopt -s autocd
 stty -echoctl
 
 # }}}
+
+# source {{{
+
+# import profile
+source $HOME/.profile
+
+}}}
+
 # exports {{{
 
 export LANG=en_GB.UTF-8
@@ -16,7 +27,7 @@ export EDITOR=nvim
 # }}}
 # path {{{
 
-PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+PATH="$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 #export GNUBIN_PATH=/usr/local/opt/coreutils/libexec/gnubin
 #PATH="$GNUBIN_PATH:$PATH"
@@ -147,3 +158,6 @@ function nman () {
 export PS1="${Blue}\w ${Red}\u${Cyan}@${Yellow}\h ${Purple}#${Rst} "
 
 # }}}
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
